@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PlatformService.Data;
 using PlatformService.Dtos;
 using PlatformService.Models;
+using PlatformService.SyncDataServices.Http;
 
 namespace PlatformService.Controllers
 {
@@ -15,10 +18,16 @@ namespace PlatformService.Controllers
 
         public IMapper _mapper { get; }
 
-        public PlatformsController(IPlatformRepo repo, IMapper mapper)
+        private readonly ICommandDataClient _commandData;
+
+        public PlatformsController(
+        IPlatformRepo repo,
+        IMapper mapper,
+        ICommandDataClient commandData)
         {
             _repo = repo;
             _mapper = mapper;
+            _commandData = commandData;
         }
 
 
@@ -44,7 +53,7 @@ namespace PlatformService.Controllers
         }
 
         [HttpPost]
-        public ActionResult<PlatformReadDto> CreatePlatform(PlatformCreateDto dto)
+        public async Task<ActionResult<PlatformReadDto>> CreatePlatform(PlatformCreateDto dto)
         {
             var platformModel = _mapper.Map<Platform>(dto);
             // if(platformModel.)
@@ -53,6 +62,15 @@ namespace PlatformService.Controllers
 
             var platformReadDto = _mapper.Map<PlatformReadDto>(platformModel);
 
+            try
+            {
+
+                await _commandData.SendPlatformToCommand(platformReadDto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"error happend {ex.InnerException}");
+            }
             return CreatedAtRoute(nameof(GetPlatformById), new { Id = platformReadDto.Id }, platformReadDto);
         }
     }
