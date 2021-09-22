@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PlatformService.Models;
 
@@ -8,29 +9,28 @@ namespace PlatformService.Data
 {
     public static class PrepDb
     {
-        public static void PrepPopulation(IApplicationBuilder app)
+        public static void PrepPopulation(IApplicationBuilder app, bool isProd)
         {
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
-                SeedData(serviceScope.ServiceProvider.GetService<AppDbContext>());
+                SeedData(serviceScope.ServiceProvider.GetService<AppDbContext>(), isProd);
             }
         }
-        private static void SeedData(AppDbContext context)
+        private static void SeedData(AppDbContext context, bool isProd)
         {
-            if (!context.Platforms.Any())
+
+            try
             {
-                Console.WriteLine("--> Seeding Data...");
-                context.Platforms.AddRange(
-                    new Platform() { Name = ".Net", Publisher = "MicroSoft", Cost = "Free" },
-                    new Platform() { Name = "Sql Server", Publisher = "MicroSoft", Cost = "Free" },
-                    new Platform() { Name = "Kubernetes", Publisher = "Cloud Native Computing Foundation", Cost = "Free" }
-                );
-                context.SaveChanges();
+                context.Database.Migrate();
+                return;
+
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine("--> We Already have Data");
+
+                Console.WriteLine($"error migrating, {ex.Message}");
             }
+
         }
     }
 }
