@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using PlatformService.AsyncDataServices;
 using PlatformService.Data;
 using PlatformService.Dtos;
 using PlatformService.Models;
@@ -19,15 +20,18 @@ namespace PlatformService.Controllers
         public IMapper _mapper { get; }
 
         private readonly ICommandDataClient _commandData;
+        private readonly IMessageBusClient _messageBus;
 
         public PlatformsController(
         IPlatformRepo repo,
         IMapper mapper,
-        ICommandDataClient commandData)
+        ICommandDataClient commandData,
+        IMessageBusClient messageBus)
         {
             _repo = repo;
             _mapper = mapper;
             _commandData = commandData;
+            _messageBus = messageBus;
         }
 
 
@@ -62,6 +66,7 @@ namespace PlatformService.Controllers
 
             var platformReadDto = _mapper.Map<PlatformReadDto>(platformModel);
 
+            // Send Sync Message
             try
             {
 
@@ -70,6 +75,19 @@ namespace PlatformService.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine($"error happend {ex.InnerException}");
+            }
+
+            // Send Async Message
+            try
+            {
+                var platformPublishedDto = _mapper.Map<PlatformPublishedDto>(platformReadDto);
+                platformPublishedDto.Event = "Platform_Published";
+                _messageBus.PublishNewPlatform(platformPublishedDto);
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Async message failed {ex.Message}");
             }
             return CreatedAtRoute(nameof(GetPlatformById), new { Id = platformReadDto.Id }, platformReadDto);
         }
