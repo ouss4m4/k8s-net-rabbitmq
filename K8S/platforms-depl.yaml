@@ -24,8 +24,12 @@ spec:
   type: ClusterIP
   selector:
     app: platformservice
-  ports: 
-  - name: platformservice
-    protocol: TCP
-    port: 80
-    targetPort: 80
+  ports:
+    - name: platformservice
+      protocol: TCP
+      port: 80
+      targetPort: 80
+    - name: platformgrpc
+      protocol: TCP
+      port: 555
+      targetPort: 555
