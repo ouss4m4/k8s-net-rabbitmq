@@ -10,7 +10,7 @@ namespace CommandsService.Data
         IEnumerable<Platform> GetAllPlatforms();
         void CreatePlatform(Platform model);
         bool PlatformExits(int platformId);
-
+        bool ExternalPlatformExists(int externalPlatformId);
         // commands
         IEnumerable<Command> GetCommandsForPlatform(int platformId);
         Command GetCommand(int platformId, int commandId);
