@@ -1,7 +1,5 @@
 {
   "files.exclude": {
-    ".vscode": true,
-    "bin": true,
-    "obj": true
+    ".vscode": true
   }
 }

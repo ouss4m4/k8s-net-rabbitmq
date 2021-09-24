@@ -6,6 +6,12 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="Google.protobuf" Version="3.18.0" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.39.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.40.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.10">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -14,6 +20,10 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.10" />
     <PackageReference Include="RabbitMQ.Client" Version="6.2.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\Platforms.proto" GrpcServices="Client" />
   </ItemGroup>
 
 </Project>
