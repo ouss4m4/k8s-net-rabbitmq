@@ -66,7 +66,7 @@ namespace PlatformService.AsyncDataServices
             Console.WriteLine($"--> Message published {message}");
         }
 
-        public void Disponse()
+        /* public override void Dispose()
         {
             Console.WriteLine("MessageBus Disposed");
             if (_channel.IsOpen)
@@ -74,7 +74,7 @@ namespace PlatformService.AsyncDataServices
                 _channel.Close();
                 _connection.Close();
             }
-        }
+        } */
         private void RabbitMQ_ConnectionShutDown(object sender, ShutdownEventArgs e)
         {
             Console.WriteLine($" RabbitMq connection shutdown");
