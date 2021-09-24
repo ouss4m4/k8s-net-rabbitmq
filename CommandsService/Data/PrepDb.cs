@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using CommandsService.Models;
 using CommandsService.SyncDataServices;
@@ -25,7 +24,6 @@ namespace CommandsService.Data
 
         private static void SeedData(ICommandRepo repo, IEnumerable<Platform> platforms)
         {
-            Console.WriteLine("Seeding Data to commands InMem Db");
 
             foreach (var plat in platforms)
             {

@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using Grpc.Core;
@@ -25,6 +26,7 @@ namespace PlatformService.SyncDataServices
             {
                 response.Platform.Add(_mapper.Map<GrpcPlatformModel>(plat));
             }
+            Console.WriteLine($"--> Grpc response {response}");
 
             return Task.FromResult(response);
         }

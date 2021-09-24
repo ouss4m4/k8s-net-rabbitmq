@@ -30,6 +30,7 @@ namespace PlatformService
         {
             Configuration = configuration;
             _env = env;
+            Console.WriteLine($" whats my env ? {_env.IsProduction()}");
         }
 
 
